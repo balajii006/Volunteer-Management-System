@@ -1,0 +1,3 @@
+-- MySQL with utf8mb4_general_ci collation is case-insensitive by default for unique constraints.
+-- The existing UNIQUE on email and username already enforces case-insensitive uniqueness.
+-- No additional indexes needed.

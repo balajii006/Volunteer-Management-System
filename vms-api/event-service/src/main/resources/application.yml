@@ -1,0 +1,75 @@
+server:
+  port: ${SERVER_PORT:8082}
+
+spring:
+  application:
+    name: vms-event-service
+  config:
+    import: optional:configserver:https://config-server-production-9c39.up.railway.app
+  datasource:
+    url: ${EVENT_DB_URL:jdbc:mysql://mainline.proxy.rlwy.net:49676/railway}
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:hAFSMpYViCCbzqulXYKnXdVzdWgVJWdV}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    validate-on-migrate: false
+    clean-disabled: false
+    clean-on-validation-error: true
+  cache:
+    type: simple
+
+eureka:
+  client:
+    service-url:
+      defaultZone: https://eureka-service-production-dbce.up.railway.app/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+security:
+  jwt:
+    issuer: ${JWT_ISSUER:volunteer-user-service}
+    secret: ${JWT_SECRET:}
+
+notification:
+  service:
+    url: ${NOTIFICATION_SERVICE_URL:https://vms-notification-service-production.up.railway.app}
+  outbox:
+    max-attempts: ${NOTIFICATION_OUTBOX_MAX_ATTEMPTS:5}
+    retry-delay-ms: ${NOTIFICATION_OUTBOX_RETRY_DELAY_MS:60000}
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      user-service:
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        permitted-number-of-calls-in-half-open-state: 3
+      notification-service:
+        failure-rate-threshold: 60
+        wait-duration-in-open-state: 15s
+        permitted-number-of-calls-in-half-open-state: 3
+  ratelimiter:
+    instances:
+      default:
+        register-health-indicator: true
+        limit-for-period: 100
+        limit-refresh-period: 1m
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized

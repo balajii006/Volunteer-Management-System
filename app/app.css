@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  /* Soft dusk-inspired brand palette */
+  --color-surface: #050816;
+  --color-surface-soft: #080f21;
+  --color-accent: #f97316;
+  --color-accent-soft: #ffe4cc;
+  --color-accent-strong: #ea580c;
+  --color-ink: #f9fafb;
+  --color-ink-muted: #9ca3af;
+}
+
+html,
+body {
+  min-height: 100%;
+  color: var(--color-ink);
+  background: #020617;
+
+  @media (prefers-color-scheme: dark) {
+    color-scheme: dark;
+    background: #020617;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+/* Subtle glassy container look for cards and panels */
+.glass-panel {
+  background: radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.18), transparent 55%)
+      border-box,
+    linear-gradient(to bottom right, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.95))
+      border-box;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  backdrop-filter: blur(22px) saturate(130%);
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.9),
+    0 0 0 1px rgba(15, 23, 42, 0.8);
+}
+
+/* Accent focus rings to match the palette */
+:where(button, a, input, textarea, select):focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Custom scrollbars for desktop */
+@media (hover: hover) and (pointer: fine) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.7) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      180deg,
+      rgba(148, 163, 184, 0.2),
+      rgba(148, 163, 184, 0.75)
+    );
+    border-radius: 9999px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      180deg,
+      rgba(148, 163, 184, 0.4),
+      rgba(148, 163, 184, 0.9)
+    );
+  }
+}
