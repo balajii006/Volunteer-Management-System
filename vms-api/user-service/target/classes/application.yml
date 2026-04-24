@@ -3,22 +3,32 @@ server:
 
 spring:
   application:
-    name: user-service
+    name: vms-user-service
   config:
-    import: "configserver:http://localhost:8888,optional:file:.env[.properties],optional:file:../../.env[.properties]"
-  cloud:
-    config:
-      fail-fast: true
+    import: optional:configserver:https://config-server-production-9c39.up.railway.app
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    url: ${DB_URL:jdbc:mysql://mainline.proxy.rlwy.net:49676/railway}
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:hAFSMpYViCCbzqulXYKnXdVzdWgVJWdV}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: validate
     open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
   flyway:
     enabled: true
+    baseline-on-migrate: true
+    repair-on-migrate: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: https://eureka-service-production-dbce.up.railway.app/eureka/
+    register-with-eureka: true
+    fetch-registry: true
 
 security:
   jwt:
